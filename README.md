@@ -60,7 +60,7 @@ k_hat = stab.select_param()[0]  # selected number of clusters
 
 The correct number of clusters (K=5) is selected. The example script `example_stadion.py` also outputs visualizations 
 called _stability paths_, representing stability as a function of the level of perturbation (see 
-[3] for more details).
+[3] for more    details).
 
 ## Installation
 
@@ -87,5 +87,4 @@ skstab was written for Python 3 and depends on joblib, matplotlib, numpy, pandas
 
 ## To-do
 
-* Documentation
 * More examples and figures

@@ -81,8 +81,34 @@ class BaseStability:
 
     Parameters
     ----------
+    X : array
+        data matrix.
     algorithm : object
-        Algorithm class with a sklearn-like API.
+        algorithm class with a sklearn-like API.
+    param_name : str
+        name of algorithm parameter determining the number of clusters.
+    param_values : list
+        list of parameter values to evaluate.
+    perturbation : str or callable
+        operation used to generate perturbed versions of the data set.
+    measure : callable or list<callable>
+        similarity or dissimilarity function between two clusterings.
+    similarity : bool or list<bool>
+        boolean indicating whether each measure is a similarity (True) or a dissimilarity (False). Must have the same
+        length as the measure parameter.
+    runs : int
+        number of perturbed samples.
+    perturbation_kwargs : list<dict> (default = [{}])
+        keyword arguments to pass to the perturbation function.
+    algo_kwargs : dict (default = {})
+        keyword arguments to pass to the algorithm class.
+    n_jobs : int (default = -1)
+        number of parallel processes.
+
+    Returns
+    -------
+    self
+        BaseStability object.
     """
 
     def __init__(self, X, algorithm, param_name, param_values, perturbation, measure, similarity, runs,
@@ -107,8 +133,36 @@ class ReferenceComparisonStability(BaseStability):
 
     Parameters
     ----------
+    X : array
+        data matrix.
     algorithm : object
-        Algorithm class with a sklearn-like API.
+        algorithm class with a sklearn-like API.
+    param_name : str
+        name of algorithm parameter determining the number of clusters.
+    param_values : list
+        list of parameter values to evaluate.
+    extended : bool
+        use extension operator to extend cluster labels to the perturbed data sets.
+    perturbation : str or callable
+        operation used to generate perturbed versions of the data set.
+    measure : callable or list<callable>
+        similarity or dissimilarity function between two clusterings.
+    similarity : bool or list<bool>
+        boolean indicating whether each measure is a similarity (True) or a dissimilarity (False). Must have the same
+        length as the measure parameter.
+    runs : int
+        number of perturbed samples.
+    perturbation_kwargs : list<dict> (default = [{}])
+        keyword arguments to pass to the perturbation function.
+    algo_kwargs : dict (default = {})
+        keyword arguments to pass to the algorithm class.
+    n_jobs : int (default = -1)
+        number of parallel processes.
+
+    Returns
+    -------
+    self
+        ReferenceComparisonStability object.
     """
 
     def __init__(self, X, algorithm, param_name, param_values, extended, perturbation, measure, similarity, runs,
@@ -148,8 +202,34 @@ class PairwiseComparisonStability(BaseStability):
 
     Parameters
     ----------
+    X : array
+        data matrix.
     algorithm : object
-        Algorithm class with a sklearn-like API.
+        algorithm class with a sklearn-like API.
+    param_name : str
+        name of algorithm parameter determining the number of clusters.
+    param_values : list
+        list of parameter values to evaluate.
+    perturbation : str or callable
+        operation used to generate perturbed versions of the data set.
+    measure : callable or list<callable>
+        similarity or dissimilarity function between two clusterings.
+    similarity : bool or list<bool>
+        boolean indicating whether each measure is a similarity (True) or a dissimilarity (False). Must have the same
+        length as the measure parameter.
+    runs : int
+        number of perturbed samples.
+    perturbation_kwargs : list<dict> (default = [{}])
+        keyword arguments to pass to the perturbation function.
+    algo_kwargs : dict (default = {})
+        keyword arguments to pass to the algorithm class.
+    n_jobs : int (default = -1)
+        number of parallel processes.
+
+    Returns
+    -------
+    self
+        PairwiseComparisonStability object.
     """
 
     def __init__(self, X, algorithm, param_name, param_values, perturbation, measure, similarity, runs,
@@ -173,10 +253,32 @@ class LabelTransferStability(BaseStability):
 
     Parameters
     ----------
+    X : array
+        data matrix.
     algorithm : object
-        Clustering algorithm class with a sklearn-like API.
+        algorithm class with a sklearn-like API.
+    param_name : str
+        name of algorithm parameter determining the number of clusters.
+    param_values : list
+        list of parameter values to evaluate.
     classifier : object
-        Classification algorithm class with a sklearn-like API.
+        classification algorithm class with a sklearn-like API.
+    measure : callable or list<callable>
+        similarity or dissimilarity function between two clusterings.
+    similarity : bool or list<bool>
+        boolean indicating whether each measure is a similarity (True) or a dissimilarity (False). Must have the same
+        length as the measure parameter.
+    runs : int
+        number of perturbed samples.
+    algo_kwargs : dict (default = {})
+        keyword arguments to pass to the algorithm class.
+    n_jobs : int (default = -1)
+        number of parallel processes.
+
+    Returns
+    -------
+    self
+        LabelTransferStability object.
     """
 
     def __init__(self, X, algorithm, param_name, param_values, classifier, measure, similarity, runs,
@@ -198,8 +300,48 @@ class LabelTransferStability(BaseStability):
 
 class StadionEstimator(ReferenceComparisonStability):
     """Stadion (stability difference criterion) from Mourer et al, 2020.
-    Mourer, A., Forest, F., Lebbah, M., Azzag, H., & Lacaille, J. (2020). Selecting the Number of Clusters K with a
-    Stability Trade-off: an Internal Validation Criterion. https://arxiv.org/abs/2006.08530"""
+
+    Parameters
+    ----------
+    X : array
+        data matrix.
+    algorithm : object
+        algorithm class with a sklearn-like API.
+    param_name : str
+        name of algorithm parameter determining the number of clusters.
+    param_values : list
+        list of parameter values to evaluate.
+    omega : list
+        list of parameter values for within-cluster stability estimation.
+    extended : bool (default = False)
+        use extension operator to extend cluster labels to the perturbed data sets.
+    perturbation : str or callable (default = 'uniform')
+        operation used to generate perturbed versions of the data set.
+    measure : callable or list<callable> (default = adjusted_rand_score)
+        similarity or dissimilarity function between two clusterings.
+    similarity : bool or list<bool> (default = True)
+        boolean indicating whether each measure is a similarity (True) or a dissimilarity (False). Must have the same
+        length as the measure parameter.
+    runs : int (default = 10)
+        number of perturbed samples.
+    perturbation_kwargs : list<dict> or 'auto' (default = 'auto')
+        keyword arguments to pass to the perturbation function. If set to 'auto', the 'eps' parameter takes 10
+        linearly spaced values in the [0, sqrt(X.shape[1])] interval.
+    algo_kwargs : dict (default = {})
+        keyword arguments to pass to the algorithm class.
+    n_jobs : int (default = -1)
+        number of parallel processes.
+
+    Returns
+    -------
+    self
+        StadionEstimator object.
+
+    References
+    ----------
+    [1] Mourer, A., Forest, F., Lebbah, M., Azzag, H., & Lacaille, J. (2020). Selecting the Number of Clusters K with a
+    Stability Trade-off: an Internal Validation Criterion. https://arxiv.org/abs/2006.08530
+    """
 
     def __init__(self, X, algorithm, param_name, param_values, omega, extended=False, perturbation='uniform',
                  measure=adjusted_rand_score, similarity=True, runs=10, perturbation_kwargs='auto', algo_kwargs={},
@@ -220,7 +362,18 @@ class StadionEstimator(ReferenceComparisonStability):
                          perturbation_kwargs, algo_kwargs, n_jobs)
 
     def stability_path(self, param_value):
-        """Compute stability path for a given parameter and reference partition on perturbed versions of the input"""
+        """Compute stability path for a given parameter and reference partition on perturbed versions of the input.
+
+        Parameters
+        ----------
+        param_value
+            algorithm parameter value determining the number of clusters.
+
+        Returns
+        -------
+        stab_path : array of shape (n_perturbation, n_measure)
+            stability score averaged over runs, for each perturbation_kwargs and measure.
+        """
         stab_path = np.zeros((len(self.perturbation_kwargs), len(self.measure), self.runs))
         for i, kwargs in enumerate(self.perturbation_kwargs):
             for run in range(self.runs):
@@ -229,6 +382,13 @@ class StadionEstimator(ReferenceComparisonStability):
 
     @property
     def between_cluster_stability_paths(self):
+        """Between-cluster stability paths for each parameter (lazy-evaluated property).
+
+        Returns
+        -------
+        between_cluster_stability_paths_ : array of shape (n_param_values, n_perturbation, n_measure)
+            between-cluster stability score averaged over runs, for each parameter, perturbation_kwargs and measure.
+        """
         if self.between_cluster_stability_paths_ is None:
             if self.n_jobs == 1:
                 stab_paths = np.zeros((len(self.param_values), len(self.perturbation_kwargs), len(self.measure)))
@@ -245,6 +405,16 @@ class StadionEstimator(ReferenceComparisonStability):
 
     @property
     def within_cluster_stability_paths(self):
+        """Within-cluster stability paths for each parameter (lazy-evaluated property). Instantiates a recursive
+        StadionEstimator on each cluster of the reference partition, whenever the cluster size is larger than the
+        number of clusters in omega.
+
+        Returns
+        -------
+        within_cluster_stability_paths_ : array of shape (n_param_values, n_perturbation, n_measure)
+            within-cluster stability score averaged over runs and parameters in omega, for each parameter,
+            perturbation_kwargs and measure.
+        """
         if self.within_cluster_stability_paths_ is None:
             def instability_job(i):
                 wstab_path = np.zeros((len(self.perturbation_kwargs), len(self.measure)))
@@ -270,13 +440,35 @@ class StadionEstimator(ReferenceComparisonStability):
 
     @property
     def stadion_paths(self):
+        """Stadion (stability difference criterion) paths for each parameter (lazy-evaluated property).
+
+        Returns
+        -------
+        stadion_paths_ : array of shape (n_param_values, n_perturbation, n_measure)
+            stadion paths, equal to the difference between between-cluster and within-cluster stability paths.
+        """
         if self.stadion_paths_ is None:
             self.stadion_paths_ = self.between_cluster_stability_paths - self.within_cluster_stability_paths
         return self.stadion_paths_
 
     @staticmethod
     def _find_crossing(stadion_paths, param_values, y_ref):
-        """Find crossing point until which all paths are under the K=1 path"""
+        """Find crossing point until which all paths are under the path with a single cluster (K=1).
+
+        Parameters
+        ----------
+        stadion_paths : array of shape (n_param_values, n_perturbation, n_measure)
+            stadion paths, as computed by the StadionEstimator.stadion_paths method.
+        param_values : list
+            list of parameter values to evaluate.
+        y_ref : array of shape (n_param_values, n_samples)
+            reference clustering for each parameter.
+
+        Returns
+        -------
+        limit : int
+            index of perturbation until which all paths are smaller than the path corresponding to K=1.
+        """
         k1_idx = np.array([i for i in range(len(param_values))
                            if (y_ref[param_values[i]] == 0).all()])  # indices where K=1
         if k1_idx.size == 0:
@@ -294,7 +486,20 @@ class StadionEstimator(ReferenceComparisonStability):
         return limit
 
     def score(self, strategy='max', crossing=True):
-        """Aggregate stadion path using specified strategy, until crossing with K=1 solution (optional)"""
+        """Aggregate stadion path using specified strategy, until crossing with K=1 solution (optional).
+
+        Parameters
+        ----------
+        strategy : string or callable (default = 'max')
+            stadion path aggregation strategy ('max', 'mean' or callable).
+        crossing : bool (default = True
+            aggregate only until all paths are under the path with a single cluster (K=1).
+
+        Returns
+        -------
+        score : array of shape (n_param_values, n_measure)
+            stadion score for each parameter and measure.
+        """
         stadion = self.stadion_paths
         if isinstance(crossing, bool) and crossing:
             crossing = StadionEstimator._find_crossing(stadion, self.param_values, self.y_ref)
@@ -315,7 +520,20 @@ class StadionEstimator(ReferenceComparisonStability):
         return score
 
     def select_param(self, strategy='max', crossing=True):
-        """Select optimal parameter among param_values"""
+        """Select optimal parameter among param_values by taking the highest aggregated stadion score.
+
+        Parameters
+        ----------
+        strategy : string or callable (default = 'max')
+            stadion path aggregation strategy ('max', 'mean' or callable).
+        crossing : bool (default = True
+            aggregate only until all paths are under the path with a single cluster (K=1).
+
+        Returns
+        -------
+        params : list
+            parameters selected by the stadion method, for each similarity measure.
+        """
         score = self.score(strategy, crossing)
         for i in range(len(self.measure)):
             if not self.similarity[i]:
@@ -325,7 +543,39 @@ class StadionEstimator(ReferenceComparisonStability):
 
 class ModelExplorer(PairwiseComparisonStability):
     """Model explorer algorithm from Ben-Hur et al, 2002.
-    Ben-Hur, A., Elisseeff, A., & Guyon, I. (2002). A stability based method for discovering structure in clustered
+
+    Parameters
+    ----------
+    X : array
+        data matrix.
+    algorithm : object
+        algorithm class with a sklearn-like API.
+    param_name : str
+        name of algorithm parameter determining the number of clusters.
+    param_values : list
+        list of parameter values to evaluate.
+    f : float (default = 0.8)
+        subsample fraction of input data set.
+    measure : callable or list<callable> (default = fowlkes_mallows_score)
+        similarity or dissimilarity function between two clusterings.
+    similarity : bool or list<bool> (default = True)
+        boolean indicating whether each measure is a similarity (True) or a dissimilarity (False). Must have the same
+        length as the measure parameter.
+    runs : int (default = 100)
+        number of perturbed samples.
+    algo_kwargs : dict (default = {})
+        keyword arguments to pass to the algorithm class.
+    n_jobs : int (default = -1)
+        number of parallel processes.
+
+    Returns
+    -------
+    self
+        ModelExplorer object.
+
+    References
+    ----------
+    [1] Ben-Hur, A., Elisseeff, A., & Guyon, I. (2002). A stability based method for discovering structure in clustered
     data. Pacific Symposium on Biocomputing. https://doi.org/10.1142/9789812799623_0002
     """
 
@@ -336,14 +586,32 @@ class ModelExplorer(PairwiseComparisonStability):
                          [{'f': f, 'return_indices': True}], algo_kwargs, n_jobs)
 
     def stability(self, param_value):
-        """Compute stability for a given parameter on input subsample"""
+        """Compute stability score for a given parameter on input subsample. As specified in [1], the score
+        corresponds to P(s > 0.9), where s are the similarity values.
+
+        Parameters
+        ----------
+        param_value
+            algorithm parameter value determining the number of clusters.
+
+        Returns
+        -------
+        stab : array of shape (n_measure,)
+            stability score averaged over runs, for each measure.
+        """
         stab = np.zeros((len(self.measure), self.runs))
         for run in range(self.runs):
             stab[:, run] = self._stability(param_value, self.perturbation_kwargs[0])
         return (stab > 0.9).mean(axis=-1)  # P(stab) > 0.9 as in Ben-Hur et al, 2002)
 
     def score(self):
-        """Model explorer score"""
+        """Model explorer scores.
+
+        Returns
+        -------
+        score : array of shape (n_param_values, n_measure)
+            model explorer score for each parameter and measure.
+        """
         if self.score_ is None:
             if self.n_jobs == 1:
                 stab = np.zeros((len(self.param_values), len(self.perturbation_kwargs), len(self.measure)))
@@ -359,7 +627,13 @@ class ModelExplorer(PairwiseComparisonStability):
         return self.score_
 
     def select_param(self):
-        """Select optimal parameter among param_values"""
+        """Select optimal parameter among param_values by taking the maximum jump in stability scores.
+
+        Returns
+        -------
+        params : list
+            parameters selected by the model explorer method, for each similarity measure.
+        """
         score = self.score()
         for i in range(len(self.measure)):
             if not self.similarity[i]:
@@ -369,7 +643,43 @@ class ModelExplorer(PairwiseComparisonStability):
 
 class ModelOrderSelection(LabelTransferStability):
     """Model order selection method from Lange et al, 2004.
-    Lange, T., Roth, V., Braun, M. L., & Buhmann, J. M. (2004). Stability-based validation of clustering solutions.
+
+    Parameters
+    ----------
+    X : array
+        data matrix.
+    algorithm : object
+        algorithm class with a sklearn-like API.
+    param_name : str
+        name of algorithm parameter determining the number of clusters.
+    param_values : list
+        list of parameter values to evaluate.
+    classifier : object (default = KNeighborsClassifier)
+        classification algorithm class with a sklearn-like API.
+    norm_samples : int (default = 20)
+        number of samples for random label normalization.
+    measure : callable or list<callable> (default = minimum_matching_distance)
+        similarity or dissimilarity function between two clusterings.
+    similarity : bool or list<bool> (default = False)
+        boolean indicating whether each measure is a similarity (True) or a dissimilarity (False). Must have the same
+        length as the measure parameter.
+    runs : int (default = 20)
+        number of perturbed samples.
+    algo_kwargs : dict (default = {})
+        keyword arguments to pass to the algorithm class.
+    clf_kwargs : dict (default = {})
+        keyword arguments to pass to the classifier class.
+    n_jobs : int (default = -1)
+        number of parallel processes.
+
+    Returns
+    -------
+    self
+        ModelOrderSelection object.
+
+    References
+    ----------
+    [1] Lange, T., Roth, V., Braun, M. L., & Buhmann, J. M. (2004). Stability-based validation of clustering solutions.
     Neural Computation. https://doi.org/10.1162/089976604773717621
     """
 
@@ -382,7 +692,18 @@ class ModelOrderSelection(LabelTransferStability):
                          clf_kwargs, n_jobs)
 
     def stability(self, param_value):
-        """Compute stability for a given parameter with random sample normalization"""
+        """Compute stability for a given parameter with label transfer and random sample normalization.
+
+        Parameters
+        ----------
+        param_value
+            algorithm parameter value determining the number of clusters.
+
+        Returns
+        -------
+        stab : array of shape (n_measure,)
+            stability score normalized and averaged over runs, for each measure.
+        """
         stab = np.zeros((len(self.measure), self.runs))
         for run in range(self.runs):
             stab[:, run] = self._stability(param_value)
@@ -395,7 +716,13 @@ class ModelOrderSelection(LabelTransferStability):
         return stab.mean(axis=-1)
 
     def score(self):
-        """Model order selection score"""
+        """Model order selection score.
+
+        Returns
+        -------
+        score : array of shape (n_param_values, n_measure)
+            model explorer score for each parameter and measure.
+        """
         if self.score_ is None:
             if self.n_jobs == 1:
                 stab = np.zeros((len(self.param_values), len(self.perturbation_kwargs), len(self.measure)))
@@ -411,7 +738,13 @@ class ModelOrderSelection(LabelTransferStability):
         return self.score_
 
     def select_param(self):
-        """Select optimal parameter among param_values"""
+        """Select optimal parameter among param_values by taking the highest stability score.
+
+        Returns
+        -------
+        params : list
+            parameters selected by the model order selection method, for each similarity measure.
+        """
         score = self.score()
         for i in range(len(self.measure)):
             if not self.similarity[i]:

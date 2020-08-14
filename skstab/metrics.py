@@ -30,6 +30,7 @@ def clustering_accuracy(y_true, y_pred):
     Returns
     -------
     accuracy : float in [0,1] (higher is better)
+        accuracy score.
     """
     y_true = y_true.astype(np.int64)
     y_pred = y_pred.astype(np.int64)
@@ -39,5 +40,20 @@ def clustering_accuracy(y_true, y_pred):
 
 
 def minimum_matching_distance(y_true, y_pred):
-    """Minimum matchnig distance (MMD)"""
+    """Minimum matching distance (MMD).
+
+    Can only be used if the number of target classes in y_true is equal to the number of clusters in y_pred.
+
+    Parameters
+    ----------
+    y_true : array, shape = [n]
+        true labels.
+    y_pred : array, shape = [n]
+        predicted cluster ids.
+
+    Returns
+    -------
+    mmd : float in [0,1]
+        minimum matching distance.
+    """
     return 1.0 - clustering_accuracy(y_true, y_pred)
