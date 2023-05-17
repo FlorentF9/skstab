@@ -2,6 +2,19 @@
 
 **skstab** is a module for clustering stability analysis in Python with a scikit-learn compatible API.
 
+If this repository was useful, please cite following conference paper:
+
+```
+@inproceedings{mourer_stadion_2023,
+    title = {Selecting the Number of Clusters K with a Stability Trade-off: an Internal Validation Criterion},
+    author = {Mourer, Alex and Forest, Florent and Lebbah, Mustapha and Azzag, Hanane and Lacaille, Jérôme},
+    year = {2023},
+    booktitle = {Pacific-Asia Conference on Knowledge Discovery and Data Mining (PAKDD)},
+    address = {Osaka, Japan}
+    url = {https://arxiv.org/abs/2006.08530}
+}
+```
+
 ## What is clustering stability?
 
 Clustering stability is a method for model selection in clustering, based on the principle that if we repeatedly 
@@ -18,7 +31,7 @@ implemented and can be used off-the-shelf:
 
 * **Model explorer** from Ben-Hur et al, 2002 [1]
 * **Model order selection** from Lange et al, 2004 [2]
-* **Stadion** from Mourer et al, 2020 [3]
+* **Stadion** from Mourer et al, 2023 [3]
 
 Each method has a usage example script (simply run `example_modelexplorer.py`/`example_modelorderselection.py`/`example_stadion.py`).
 Let us start with the K-means algorithm and Stadion [3], since it effectively selects the number of clusters K even in 
@@ -60,7 +73,7 @@ k_hat = stab.select_param()[0]  # selected number of clusters
 
 The correct number of clusters (K=5) is selected. The example script `example_stadion.py` also outputs visualizations 
 called _stability paths_, representing stability as a function of the level of perturbation (see 
-[3] for more    details).
+[3] for more details).
 
 ## Installation
 
@@ -80,11 +93,7 @@ skstab was written for Python 3 and depends on joblib, matplotlib, numpy, pandas
 > [2] Lange, T., Roth, V., Braun, M. L., & Buhmann, J. M. (2004). Stability-based validation of clustering solutions.
     Neural Computation. https://doi.org/10.1162/089976604773717621
 
-> [3] Mourer, A., Forest, F., Lebbah, M., Azzag, H., & Lacaille, J. (2020). Selecting the Number of Clusters K with a
-    Stability Trade-off: an Internal Validation Criterion. https://arxiv.org/abs/2006.08530
+> [3] Mourer, A., Forest, F., Lebbah, M., Azzag, H., & Lacaille, J. (2023). Selecting the Number of Clusters K with a
+    Stability Trade-off: an Internal Validation Criterion. Pacific-Asia Conference on Knowledge Discovery and Data Mining (PAKDD). https://arxiv.org/abs/2006.08530
 
 > [4] Von Luxburg, U. (2009). Clustering stability: An overview. Foundations and Trends in Machine Learning. https://doi.org/10.1561/2200000008
-
-## To-do
-
-* More examples and figures
